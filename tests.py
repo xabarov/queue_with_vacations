@@ -1,16 +1,12 @@
+import time
+
 import numpy as np
+from most_queue.sim import rand_destribution as rd
 from most_queue.sim.qs_sim import QueueingSystemSimulator
 from most_queue.theory.mgn_with_h2_delay_cold_warm import MGnH2ServingColdWarmDelay
 
-from utils import print_table, make_plot, calc_moments_by_mean_and_coev, dump_stat, load_stat
-import json
-import matplotlib.pyplot as plt
-
-import numpy
-
-from most_queue.sim import rand_destribution as rd
-import time
-import math
+from utils import dump_stat
+from utils import print_table, make_plot, calc_moments_by_mean_and_coev, load_stat
 
 
 def get_sim_stat(stat, n, l, buff, b, b_c, b_w, b_d, num_of_jobs, p_limit, sim_ave):
@@ -336,38 +332,62 @@ def delay_mean_test(b1_service, coev_service,
 
 
 if __name__ == '__main__':
-    n = 10
+    import os
+
+    n = 3
     ro = 0.7
-    # stat = ro_test(b1_service=10.0, coev_service=1.2,
-    #                b1_warm=3.1, coev_warm=0.87,
-    #                b1_cold=4.1, coev_cold=1.1,
-    #                b1_cold_delay=3.71, coev_cold_delay=1.2,
-    #                n=n, num_of_jobs=300000,
-    #                num_of_roes=30, min_ro=0.1, max_ro=0.9, w_pls_dt=1e-3,
-    #                stable_w_pls=True, sim_ave=10)
 
-    # stat = n_test(b1_service=10.0, coev_service=1.2,
-    #                b1_warm=3.1, coev_warm=0.87,
-    #                b1_cold=4.1, coev_cold=1.1,
-    #                b1_cold_delay=3.71, coev_cold_delay=1.2,
-    #                num_of_jobs=300000,
-    #                n_min=1, n_max=30, ro=ro, w_pls_dt=1e-3,
-    #                stable_w_pls=True, sim_ave=10)
+    if not os.path.exists(f"ro_test/n_{n}.json"):
+        ro_stat = ro_test(b1_service=10.0, coev_service=1.2,
+                          b1_warm=3.1, coev_warm=0.87,
+                          b1_cold=4.1, coev_cold=1.1,
+                          b1_cold_delay=3.71, coev_cold_delay=1.2,
+                          n=n, num_of_jobs=300000,
+                          num_of_roes=30, min_ro=0.1, max_ro=0.9, w_pls_dt=1e-3,
+                          stable_w_pls=True, sim_ave=10)
 
-    # stat = delay_mean_test(b1_service=10.0, coev_service=1.2,
-    #                        b1_warm=3.1, coev_warm=0.87,
-    #                        b1_cold=4.1, coev_cold=1.1, ro=ro,
-    #                        coev_cold_delay=1.2,
-    #                        n=n, num_of_jobs=1000000,
-    #                        num_of_delays=30, min_delay=0.1, max_delay=10,
-    #                        w_pls_dt=1e-3, stable_w_pls=True, sim_ave=10)
+        dump_stat(ro_stat, save_name=f"ro_test/n_{n}.json")
 
-    # stat = load_stat(f"delay_mean_test/n_{n}_ro_{ro}.json")
-    # stat = load_stat(f"ro_test/n_{n}.json")
-    stat = load_stat(f"n_test/ro_{ro:0.3f}.json")
-    # dump_stat(stat, save_name=f"ro_test/n_{n}.json")
-    # dump_stat(stat, save_name=f"n_test/ro_{ro:0.3f}.json")
-    # dump_stat(stat, save_name=f"delay_mean_test/n_{n}_ro_{ro}.json")
-    print_table(stat)
-    make_plot(stat, param_name='n', mode='abs')
-    # make_plot(stat, param_name='delay_mean', mode='error')
+    else:
+        ro_stat = load_stat(f"ro_test/n_{n}.json")
+
+    print_table(ro_stat)
+    make_plot(ro_stat, param_name='ro', mode='abs')
+
+    if not os.path.exists(f"n_test/ro_{ro:0.3f}.json"):
+        n_stat = n_test(b1_service=10.0, coev_service=1.2,
+                        b1_warm=3.1, coev_warm=0.87,
+                        b1_cold=4.1, coev_cold=1.1,
+                        b1_cold_delay=3.71, coev_cold_delay=1.2,
+                        num_of_jobs=300000,
+                        n_min=1, n_max=30, ro=ro, w_pls_dt=1e-3,
+                        stable_w_pls=True, sim_ave=10)
+
+        dump_stat(n_stat, save_name=f"n_test/ro_{ro:0.3f}.json")
+
+    else:
+
+        n_stat = load_stat(f"n_test/ro_{ro:0.3f}.json")
+
+
+    print_table(n_stat)
+    make_plot(n_stat, param_name='n', mode='abs')
+
+    if not os.path.exists(f"delay_mean_test/n_{n}_ro_{ro}.json"):
+
+        delay_stat = delay_mean_test(b1_service=10.0, coev_service=1.2,
+                                     b1_warm=3.1, coev_warm=0.87,
+                                     b1_cold=4.1, coev_cold=1.1, ro=ro,
+                                     coev_cold_delay=1.2,
+                                     n=n, num_of_jobs=1000000,
+                                     num_of_delays=30, min_delay=0.1, max_delay=10,
+                                     w_pls_dt=1e-3, stable_w_pls=True, sim_ave=10)
+
+        dump_stat(delay_stat, save_name=f"delay_mean_test/n_{n}_ro_{ro}.json")
+
+    else:
+
+        delay_stat = load_stat(f"delay_mean_test/n_{n}_ro_{ro}.json")
+
+    print_table(delay_stat)
+    make_plot(delay_stat, param_name='delay_mean', mode='abs')
