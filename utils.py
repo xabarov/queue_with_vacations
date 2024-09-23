@@ -1,6 +1,10 @@
 import json
-import matplotlib.pyplot as plt
 import math
+
+import matplotlib
+import matplotlib.pyplot as plt
+
+matplotlib.use('TkAgg')
 
 
 def print_table(experiments_stat):
