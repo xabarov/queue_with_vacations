@@ -1,53 +1,56 @@
-# NUMERICAL CALCULATION OF A MULTICHANNEL QUEUES WITH WARM-UP, COOLING AND DELAY IN THE START OF COOLING
+# Numerical Calculation of Multichannel Queues with Warm-Up, Cooling and Delay in Cooling Start
 
 ## Overview
-This project demonstrates numerical calculations for multichannel queues with vacations such as warm-up, cooling, and delay in the start of cooling. The code includes functions to run calculations based on ours method and validate the results using simulations.
+This repository contains numerical calculations and simulation code for multichannel queue systems with:
+- Vacation periods (warm-up, cooling)
+- Delayed cooling start
+- Different service time distributions
+
+## Abstract: 
+
+A method is proposed for obtaining probabilities of states, initial moments of waiting and sojourn times of applications in a multi-channel queueing system with hyperexponential service times, warm-up, cooling, and delay before cooling starts. The parameters of the hyperexponential distribution are generally complex, which allows setting arbitrary variation coefficients of the specified distributions (including less than one). Numerical calculation results are presented in comparison with simulation modeling results, confirming the high accuracy and correctness of the proposed solution. 
+
+The methodology is described in the research paper:
+Лохвицкий, В. А. Численный расчет многоканальной системы массового обслуживания с разогревом, охлаждением и задержкой начала охлаждения / В.А. Лохвицкий, Р.С. Хабаров, Е.Л. Яковлев // Авиакосмическое приборостроение. – 2025. – №1. – С.44-57. – DOI 10.25791/aviakosmos.1.2025.1456.
+
+## Requirements
+- Python 3.8+
+- Dependencies in `requirements.txt`
 
 ## Installation
-To install the required packages, run:
 ```bash
+git clone https://github.com/username/repo.git
+cd repo
 pip install -r requirements.txt
 ```
-or 
-```bash
-pip install most-queue
-```
 
-## Run One Calculation vs Simulation
+## Usage
 
-The script `run_one_calc_vs_sim.py` is used to compare numerical calculations with simulations. It takes parameters such as arrival rate, service time distribution, warmup and cooling times, number of channels, and number of jobs for the simulation.
-To run the script, use:
+### Main Scripts
+1. **run_one_calc_vs_sim.py**: Compare numerical calculations with simulations for given parameters.
+   ```bash
+   python run_one_calc_vs_sim.py 
+   ```
 
-```bash
-python run_one_calc_vs_sim.py 
-```
+2. **Run Waiting Time Analysis**:
+   - By utilization factor: `python run_wait_time_vs_utilization.py`
+   - By number of channels: `python run_wait_time_vs_channels.py`
+   - By service time CV: `python run_wait_time_vs_service_cv.py`
 
-## Run waiting time average calculation vs Simulation 
-
-### Utilization Factor
-
-The script `run_wait_time_vs_utilization.py` is used to compare numerical calculations with simulations for different utilization factors of the queue. To run the script, use:
-```bash
-python run_wait_time_vs_utilization.py
-```
-### Channels
-
-To run the script for a specific number of channels, use:
-```bash
-python run_wait_time_vs_channels.py
-```
-
-### Service Time Coefficient of Variation (CV)
-The script `run_wait_time_vs_sevice_cv.py` is used to compare numerical calculations with simulations for different service time coefficients of variation. To run the script, use:
-
-```bash
-python run_wait_time_vs_service_cv.py
-```
+## Results
+Visualizations and quantitative results are available in the [results](results/) directory.
 
 
 ## Contributing
-Contributions are welcome! Please fork the repository and submit a pull request.
-You can write us to xabarov.r@yandex.ru  for any questions or feedback.
+1. Fork repository
+2. Create issue before submitting changes
+3. Pull requests welcome!
+
+## Issues
+Report bugs, request features or ask questions in [Issues](https://github.com/xabarov/queue_with_vacations/issues).
+
+## License
+[MIT License](LICENSE)
 
 ## Paper Reference
 Лохвицкий, В. А. Численный расчет многоканальной системы массового обслуживания с разогревом, охлаждением и задержкой начала охлаждения / В. А. Лохвицкий, Р. С. Хабаров, Е. Л. Яковлев // Авиакосмическое приборостроение. – 2025. – № 1. – С. 44-57. – DOI 10.25791/aviakosmos.1.2025.1456. – EDN OVJXKE.
