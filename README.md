@@ -36,7 +36,7 @@ python run_one_calc_vs_sim.py
 ```
 
 #### Waiting Time Analysis
-:chart: Analyze system performance with:
+🚀 Analyze system performance with:
 - `run_wait_time_vs_utilization.py` by utilization factor
 - `run_wait_time_vs_channels.py` by number of channels
 - `run_wait_time_vs_service_cv.py` by service time CV
@@ -46,7 +46,7 @@ python run_one_calc_vs_sim.py
 
 ## Results
 
-:data_bar_chart: Visualizations and quantitative results in [results/](results/) directory.
+📊 Visualizations and quantitative results in [results/](results/) directory.
 
 ## Contributing
 
