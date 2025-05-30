@@ -16,7 +16,7 @@ A method is proposed for obtaining probabilities of states, initial moments of w
 
 
 ## Requirements
-- Python 3.8+
+:computer: **Python 3.8+**
 - Dependencies in `requirements.txt`
 
 ## Installation
@@ -46,7 +46,7 @@ python run_one_calc_vs_sim.py
 
 ## Results
 
-:chart: Visualizations and quantitative results in [results/](results/) directory.
+:data_bar_chart: Visualizations and quantitative results in [results/](results/) directory.
 
 ## Contributing
 
@@ -60,7 +60,7 @@ Report bugs, request features or ask questions in [Issues](https://github.com/xa
 
 ## License
 
-[MIT License](LICENSE)
+:page_facing_up: [MIT License](LICENSE)
 
 ## Related Repositories
 
