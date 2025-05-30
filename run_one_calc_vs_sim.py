@@ -117,45 +117,27 @@ def run_simulation(arrival_rate: float, b: list[float],
 
 if __name__ == "__main__":
 
-    ARRIVAL_RATE = 1.0
+    from base_parameters import QUEUE_PARAMETERS as qp
 
-    SERVICE_TIME_CV = 1.2
-
-    WARM_UP_TIME_MEAN = 3.1
-    WARM_UP_TIME_CV = 0.87
-
-    COOL_TIME_MEAN = 4.1
-    COOL_TIME_CV = 1.1
-
-    COOL_DELAY_MEAN = 3.71
-    COOL_DELAY_CV = 1.2
-
-    NUM_OF_CHANNES = 3
-
-    UTILIZATION_FACTOR = 0.7
-
-    NUM_OF_JOBS_PER_SIM = 300_000  # Number of jobs per simulation
-    NUM_OF_SIM_TO_AVERAGE = 3  # Number of simulations to average over
-
-    SERVICE_TIME_MEAN = NUM_OF_CHANNES*UTILIZATION_FACTOR/ARRIVAL_RATE
+    SERVICE_TIME_MEAN = qp['channels']*qp['utilization']/qp['arrival_rate']
 
     # Calculate initial moments for service time, warm-up time,
     # cool-down time, and delay before cooling starts.
     b_service = calc_moments_by_mean_and_coev(
-        SERVICE_TIME_MEAN, SERVICE_TIME_CV)
+        SERVICE_TIME_MEAN, qp['service']['cv'])
     b_warmup = calc_moments_by_mean_and_coev(
-        WARM_UP_TIME_MEAN, WARM_UP_TIME_CV)
-    b_cooling = calc_moments_by_mean_and_coev(COOL_TIME_MEAN, COOL_TIME_CV)
-    b_delay = calc_moments_by_mean_and_coev(COOL_DELAY_MEAN, COOL_DELAY_CV)
+        qp['warmup']['mean'], qp['warmup']['cv'])
+    b_cooling = calc_moments_by_mean_and_coev(qp['cooling']['mean'], qp['cooling']['cv'])
+    b_delay = calc_moments_by_mean_and_coev(qp['delay']['mean'], qp['delay']['cv'])
 
     num_results = run_calculation(
-        arrival_rate=ARRIVAL_RATE, num_channels=NUM_OF_CHANNES, b=b_service,
+        arrival_rate=qp['arrival_rate'], num_channels=qp['channels'], b=b_service,
         b_w=b_warmup, b_c=b_cooling, b_d=b_delay
     )
     sim_results = run_simulation(
-        arrival_rate=ARRIVAL_RATE, num_channels=NUM_OF_CHANNES, b=b_service,
-        b_w=b_warmup, b_c=b_cooling, b_d=b_delay, num_of_jobs=NUM_OF_JOBS_PER_SIM,
-        ave_num=NUM_OF_SIM_TO_AVERAGE
+        arrival_rate=qp['arrival_rate'], num_channels=qp['channels'], b=b_service,
+        b_w=b_warmup, b_c=b_cooling, b_d=b_delay, num_of_jobs=qp['jobs_per_sim'],
+        ave_num=qp['sim_to_average']
     )
 
     probs_print(p_sim=sim_results["p"], p_num=num_results["p"], size=10)

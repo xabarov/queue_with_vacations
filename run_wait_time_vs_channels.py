@@ -9,23 +9,7 @@ from run_one_calc_vs_sim import (calc_moments_by_mean_and_coev,
                                  run_calculation, run_simulation)
 from utils import calc_rel_error_percent, plot_w1, plot_w1_errors
 
-ARRIVAL_RATE = 1.0
-
-SERVICE_TIME_CV = 1.2
-
-WARM_UP_TIME_MEAN = 2.0
-WARM_UP_TIME_CV = 0.87
-
-COOL_TIME_MEAN = 2.0
-COOL_TIME_CV = 1.2
-
-COOL_DELAY_MEAN = 2.0
-COOL_DELAY_CV = 1.4
-
-UTILIZATION = 0.7
-
-NUM_OF_JOBS_PER_SIM = 300_000  # Number of jobs per simulation
-NUM_OF_SIM_TO_AVERAGE = 10  # Number of simulations to average over
+from base_parameters import QUEUE_PARAMETERS as qp
 
 
 def run_wait_time_vs_channels_num(channels_min: int = 1, channels_max: int = 10,
@@ -42,21 +26,23 @@ def run_wait_time_vs_channels_num(channels_min: int = 1, channels_max: int = 10,
     total_num_time = 0
     total_sim_time = 0
 
-    b_w = calc_moments_by_mean_and_coev(WARM_UP_TIME_MEAN, WARM_UP_TIME_CV)
-    b_c = calc_moments_by_mean_and_coev(COOL_TIME_MEAN, COOL_TIME_CV)
-    b_d = calc_moments_by_mean_and_coev(COOL_DELAY_MEAN, COOL_DELAY_CV)
+    b_w = calc_moments_by_mean_and_coev(
+        qp['warmup']['mean'], qp['warmup']['cv'])
+    b_c = calc_moments_by_mean_and_coev(
+        qp['cooling']['mean'], qp['cooling']['cv'])
+    b_d = calc_moments_by_mean_and_coev(qp['delay']['mean'], qp['delay']['cv'])
 
     for n in channels:
         print(f"Start {n} channels...")
-        service_mean = n*UTILIZATION/ARRIVAL_RATE
+        service_mean = n*qp['utilization']/qp['arrival_rate']
 
-        b = calc_moments_by_mean_and_coev(service_mean, SERVICE_TIME_CV)
+        b = calc_moments_by_mean_and_coev(service_mean, qp['service']['cv'])
 
         num_results = run_calculation(
-            arrival_rate=ARRIVAL_RATE, num_channels=n, b=b, b_w=b_w, b_c=b_c, b_d=b_d)
+            arrival_rate=qp['arrival_rate'], num_channels=n, b=b, b_w=b_w, b_c=b_c, b_d=b_d)
         sim_results = run_simulation(
-            arrival_rate=ARRIVAL_RATE, num_channels=n, b=b, b_w=b_w, b_c=b_c, b_d=b_d,
-            num_of_jobs=NUM_OF_JOBS_PER_SIM, ave_num=NUM_OF_SIM_TO_AVERAGE)
+            arrival_rate=qp['arrival_rate'], num_channels=n, b=b, b_w=b_w, b_c=b_c, b_d=b_d,
+            num_of_jobs=qp['jobs_per_sim'], ave_num=qp['sim_to_average'])
 
         w1_num.append(num_results["w"][0])
         w1_sim.append(sim_results["w"][0])
