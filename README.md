@@ -36,6 +36,9 @@ pip install -r requirements.txt
    - By utilization factor: `python run_wait_time_vs_utilization.py`
    - By number of channels: `python run_wait_time_vs_channels.py`
    - By service time CV: `python run_wait_time_vs_service_cv.py`
+   - By warm-up time mean and CV: `python run_wait_time_vs_warmup_time.py`
+   - By cool time mean and CV: `python run_wait_time_vs_cooling_time.py`
+   - By cool delay mean and CV: `python run_wait_time_vs_cooling_delay_time.py`
 
 ## Results
 Visualizations and quantitative results are available in the [results](results/) directory.
