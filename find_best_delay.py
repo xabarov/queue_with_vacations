@@ -112,7 +112,7 @@ if __name__ == "__main__":
     rhos, best_delay, best_cost, best_server, best_wait = run(
         base_qp, base_qp['wait_cost'], base_qp['server_cost'],
         wait_cost_calc_func=calc_no_linear_wait_cost)
-    
+
     y_labels = ["Cooling Delay", "Total Cost", "Server Cost", 'Wait Cost']
 
     for y_label, y_data in zip(y_labels, [best_delay, best_cost, best_server, best_wait]):
@@ -122,10 +122,10 @@ if __name__ == "__main__":
         ax.plot(rhos, y_data, color="black")
         ax.set_xlabel(r"$\rho$")
         ax.set_ylabel(y_label)
-        
-        save_path = f"{y_label.replace(' ', '_').lower()}.png"
 
-        plt.savefig(os.path.join('results/best_delay', save_path))
+        SAVE_PATH = f"{y_label.replace(' ', '_').lower()}.png"
+
+        plt.savefig(os.path.join('results/best_delay', SAVE_PATH))
         plt.show()
 
         plt.close(_fig)
