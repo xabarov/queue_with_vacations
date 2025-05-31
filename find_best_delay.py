@@ -67,7 +67,8 @@ def run(qp, wait_cost=1.0, server_cost=10.0, wait_cost_calc_func=calc_wait_cost)
                     delay, qp['delay']['cv']['base'])
 
                 num_results = run_calculation(
-                    arrival_rate=qp['arrival_rate'], num_channels=qp['channels']['base'], b=b, b_w=b_w, b_c=b_c, b_d=b_d)
+                    arrival_rate=qp['arrival_rate'], num_channels=qp['channels']['base'],
+                    b=b, b_w=b_w, b_c=b_c, b_d=b_d)
 
                 server_busy_probs = num_results["servers_busy_probs"]
                 cur_servers_cost = np.sum(
@@ -95,9 +96,9 @@ def run(qp, wait_cost=1.0, server_cost=10.0, wait_cost_calc_func=calc_wait_cost)
 
 
 if __name__ == "__main__":
-    
+
     import os
-    
+
     # if results/best_delay does not exist
     if not os.path.exists("results/best_delay"):
         os.makedirs("results/best_delay")
@@ -109,19 +110,20 @@ if __name__ == "__main__":
     base_qp['cooling']['mean']['base'] = 5.0
 
     rhos, best_delay, best_cost, best_server, best_wait = run(
-        base_qp, base_qp['wait_cost'], base_qp['server_cost'], wait_cost_calc_func=calc_no_linear_wait_cost)
+        base_qp, base_qp['wait_cost'], base_qp['server_cost'],
+        wait_cost_calc_func=calc_no_linear_wait_cost)
+    
+    y_labels = ["Cooling Delay", "Total Cost", "Server Cost", 'Wait Cost']
 
-    for y_label, save_path, y_data in zip(["Cooling Delay", "Total Cost", "Server Cost", 'Wait Cost'],
-                                          ["best_delays", "best_total_costs",
-                                              "best_server_costs", 'best_wait_costs'],
-                                          [best_delay, best_cost, best_server, best_wait]):
+    for y_label, y_data in zip(y_labels, [best_delay, best_cost, best_server, best_wait]):
 
         # plot results
         _fig, ax = plt.subplots()
         ax.plot(rhos, y_data, color="black")
-        ax.legend()
         ax.set_xlabel(r"$\rho$")
         ax.set_ylabel(y_label)
+        
+        save_path = f"{y_label.replace(' ', '_').lower()}.png"
 
         plt.savefig(os.path.join('results/best_delay', save_path))
         plt.show()
