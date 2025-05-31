@@ -3,10 +3,10 @@ Find best cooling delay for a given set of parameters and utilization factor.
 """
 import matplotlib.pyplot as plt
 import numpy as np
+from tqdm import tqdm
 
 from run_one_calc_vs_sim import calc_moments_by_mean_and_coev, run_calculation
 from utils import read_parameters_from_yaml
-from tqdm import tqdm
 
 
 def calc_wait_cost(w1: float, wait_cost: float,) -> float:
@@ -97,10 +97,15 @@ def run(qp, wait_cost=1.0, server_cost=10.0, wait_cost_calc_func=calc_wait_cost)
 if __name__ == "__main__":
 
     base_qp = read_parameters_from_yaml("base_parameters.yaml")
+
+    # only cooling for simplification
+    base_qp['warmup']['mean']['base'] = 0.1
+    base_qp['cooling']['mean']['base'] = 5.0
+
     rhos, best_delay, best_cost, best_server, best_wait = run(
         base_qp, base_qp['wait_cost'], base_qp['server_cost'], wait_cost_calc_func=calc_no_linear_wait_cost)
 
-    for y_label, save_path, y_data in zip(["Cooling Delay", "Total Cost", "Server Cost", 'Wait Cost"'],
+    for y_label, save_path, y_data in zip(["Cooling Delay", "Total Cost", "Server Cost", 'Wait Cost'],
                                           ["best_delays", "best_total_costs",
                                               "best_server_costs", 'best_wait_costs'],
                                           [best_delay, best_cost, best_server, best_wait]):
