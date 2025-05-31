@@ -43,9 +43,7 @@ python main.py
 
 #### Find Best Cooling Delay
 🥇 Optimize cooling delay for a given set of parameters and utilization factor:
-```bash
-python find_best_delay.py 
-```
+look at the script `find_best_delay.py` for more details on
 
 ## Results
 
