@@ -36,10 +36,11 @@ python run_one_calc_vs_sim.py
 ```
 
 #### Waiting Time Analysis
-🚀 Analyze system performance with:
+🚀 Run all calculations and simulations with `base_parameters.yaml` parameters:
 ```bash
 python main.py 
 ```
+All results are saved in the `results` directory with 'exp_' prefix.
 
 #### Find Best Cooling Delay
 🥇 Optimize cooling delay for a given set of parameters and utilization factor:
