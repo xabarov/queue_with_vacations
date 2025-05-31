@@ -47,7 +47,8 @@ def run_calculation(arrival_rate: float, b: list[float],
     stat["warmup_prob"] = solver.get_warmup_prob()
     stat["cold_prob"] = solver.get_cold_prob()
     stat["cold_delay_prob"] = solver.get_cold_delay_prob()
-
+    stat['servers_busy_probs'] = solver.get_probs_of_servers_busy()
+ 
     return stat
 
 
@@ -117,25 +118,27 @@ def run_simulation(arrival_rate: float, b: list[float],
 
 if __name__ == "__main__":
 
-    from base_parameters import QUEUE_PARAMETERS as qp
+    from utils import read_parameters_from_yaml
+    
+    qp = read_parameters_from_yaml("base_parameters.yaml")
 
-    SERVICE_TIME_MEAN = qp['channels']*qp['utilization']/qp['arrival_rate']
+    SERVICE_TIME_MEAN = qp['channels']['base']*qp['utilization']['base']/qp['arrival_rate']
 
     # Calculate initial moments for service time, warm-up time,
     # cool-down time, and delay before cooling starts.
     b_service = calc_moments_by_mean_and_coev(
-        SERVICE_TIME_MEAN, qp['service']['cv'])
+        SERVICE_TIME_MEAN, qp['service']['cv']['base'])
     b_warmup = calc_moments_by_mean_and_coev(
-        qp['warmup']['mean'], qp['warmup']['cv'])
-    b_cooling = calc_moments_by_mean_and_coev(qp['cooling']['mean'], qp['cooling']['cv'])
-    b_delay = calc_moments_by_mean_and_coev(qp['delay']['mean'], qp['delay']['cv'])
+        qp['warmup']['mean']['base'], qp['warmup']['cv']['base'])
+    b_cooling = calc_moments_by_mean_and_coev(qp['cooling']['mean']['base'], qp['cooling']['cv']['base'])
+    b_delay = calc_moments_by_mean_and_coev(qp['delay']['mean']['base'], qp['delay']['cv']['base'])
 
     num_results = run_calculation(
-        arrival_rate=qp['arrival_rate'], num_channels=qp['channels'], b=b_service,
+        arrival_rate=qp['arrival_rate'], num_channels=qp['channels']['base'], b=b_service,
         b_w=b_warmup, b_c=b_cooling, b_d=b_delay
     )
     sim_results = run_simulation(
-        arrival_rate=qp['arrival_rate'], num_channels=qp['channels'], b=b_service,
+        arrival_rate=qp['arrival_rate'], num_channels=qp['channels']['base'], b=b_service,
         b_w=b_warmup, b_c=b_cooling, b_d=b_delay, num_of_jobs=qp['jobs_per_sim'],
         ave_num=qp['sim_to_average']
     )

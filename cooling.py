@@ -6,7 +6,6 @@ import os
 
 import numpy as np
 
-from base_parameters import QUEUE_PARAMETERS as qp
 from run_one_calc_vs_sim import (
     calc_moments_by_mean_and_coev,
     run_calculation,
@@ -15,12 +14,12 @@ from run_one_calc_vs_sim import (
 from utils import calc_rel_error_percent, plot_probs, plot_w1, plot_w1_errors
 
 
-def run_wait_time_vs_cool_ave(cool_min: float = 1.0, cool_max: float = 5.0,
-                              num_points: int = 20, save_path: str = None):
+def run_cool_ave(qp, save_path: str = None):
     """
     Run simulation and calculation for different cooling mean times
     """
-    cools = np.linspace(cool_min, cool_max, num_points)
+    cools = np.linspace(qp['cooling']['mean']['min'], qp['cooling']['mean']['max'],
+                        qp['cooling']['mean']['num_points'])
 
     w1_num = []
     w1_sim = []
@@ -33,23 +32,23 @@ def run_wait_time_vs_cool_ave(cool_min: float = 1.0, cool_max: float = 5.0,
     total_num_time = 0
     total_sim_time = 0
 
-    service_mean = qp['channels']*qp['utilization']/qp['arrival_rate']
+    service_mean = qp['channels']['base']*qp['utilization']['base']/qp['arrival_rate']
 
-    b = calc_moments_by_mean_and_coev(service_mean, qp['service']['cv'])
+    b = calc_moments_by_mean_and_coev(service_mean, qp['service']['cv']['base'])
     b_w = calc_moments_by_mean_and_coev(
-        qp['warmup']['mean'], qp['warmup']['cv'])
-    b_d = calc_moments_by_mean_and_coev(qp['delay']['mean'], qp['delay']['cv'])
+        qp['warmup']['mean']['base'], qp['warmup']['cv']['base'])
+    b_d = calc_moments_by_mean_and_coev(qp['delay']['mean']['base'], qp['delay']['cv']['base'])
 
     for cool_num, cool_ave in enumerate(cools):
         print(
             f"Start {cool_num + 1}/{len(cools)} with cooling time={cool_ave:0.3f}... ")
 
-        b_c = calc_moments_by_mean_and_coev(cool_ave, qp['cooling']['cv'])
+        b_c = calc_moments_by_mean_and_coev(cool_ave, qp['cooling']['cv']['base'])
 
         num_results = run_calculation(
-            arrival_rate=qp['arrival_rate'], num_channels=qp['channels'], b=b, b_w=b_w, b_c=b_c, b_d=b_d)
+            arrival_rate=qp['arrival_rate'], num_channels=qp['channels']['base'], b=b, b_w=b_w, b_c=b_c, b_d=b_d)
         sim_results = run_simulation(
-            arrival_rate=qp['arrival_rate'], num_channels=qp['channels'], b=b, b_w=b_w, b_c=b_c, b_d=b_d,
+            arrival_rate=qp['arrival_rate'], num_channels=qp['channels']['base'], b=b, b_w=b_w, b_c=b_c, b_d=b_d,
             num_of_jobs=qp['jobs_per_sim'], ave_num=qp['sim_to_average'])
 
         w1_num.append(num_results["w"][0])
@@ -90,12 +89,12 @@ def run_wait_time_vs_cool_ave(cool_min: float = 1.0, cool_max: float = 5.0,
     return cools, w1_num, w1_sim, w1_rel_errors, cool_probs_sim, cool_probs_num
 
 
-def run_wait_time_vs_cool_cv(cool_cv_min: float = 0.3, cool_cv_max: float = 3.0,
-                             num_points: int = 20, save_path: str = None):
+def run_cool_cv(qp, save_path: str = None):
     """
     Run simulation and calculation for different cooling coefficient of variation
     """
-    cools = np.linspace(cool_cv_min, cool_cv_max, num_points)
+    cools = np.linspace(qp['cooling']['cv']['min'], qp['cooling']['cv']['max'],
+                        qp['cooling']['cv']['num_points'])
 
     w1_num = []
     w1_sim = []
@@ -108,23 +107,23 @@ def run_wait_time_vs_cool_cv(cool_cv_min: float = 0.3, cool_cv_max: float = 3.0,
     total_num_time = 0
     total_sim_time = 0
 
-    service_mean = qp['channels']*qp['utilization']/qp['arrival_rate']
+    service_mean = qp['channels']['base']*qp['utilization']['base']/qp['arrival_rate']
 
-    b = calc_moments_by_mean_and_coev(service_mean, qp['service']['cv'])
+    b = calc_moments_by_mean_and_coev(service_mean, qp['service']['cv']['base'])
     b_w = calc_moments_by_mean_and_coev(
-        qp['warmup']['mean'], qp['warmup']['cv'])
-    b_d = calc_moments_by_mean_and_coev(qp['delay']['mean'], qp['delay']['cv'])
+        qp['warmup']['mean']['base'], qp['warmup']['cv']['base'])
+    b_d = calc_moments_by_mean_and_coev(qp['delay']['mean']['base'], qp['delay']['cv']['base'])
 
     for cool_num, cool_cv in enumerate(cools):
         print(
             f"Start {cool_num + 1}/{len(cools)} with cooling cv={cool_cv:0.3f}... ")
 
-        b_c = calc_moments_by_mean_and_coev(qp['cooling']['mean'], cool_cv)
+        b_c = calc_moments_by_mean_and_coev(qp['cooling']['mean']['base'], cool_cv)
 
         num_results = run_calculation(
-            arrival_rate=qp['arrival_rate'], num_channels=qp['channels'], b=b, b_w=b_w, b_c=b_c, b_d=b_d)
+            arrival_rate=qp['arrival_rate'], num_channels=qp['channels']['base'], b=b, b_w=b_w, b_c=b_c, b_d=b_d)
         sim_results = run_simulation(
-            arrival_rate=qp['arrival_rate'], num_channels=qp['channels'], b=b, b_w=b_w, b_c=b_c, b_d=b_d,
+            arrival_rate=qp['arrival_rate'], num_channels=qp['channels']['base'], b=b, b_w=b_w, b_c=b_c, b_d=b_d,
             num_of_jobs=qp['jobs_per_sim'], ave_num=qp['sim_to_average'])
 
         w1_num.append(num_results["w"][0])
@@ -163,15 +162,3 @@ def run_wait_time_vs_cool_cv(cool_cv_min: float = 0.3, cool_cv_max: float = 3.0,
                    save_path=cool_probs_save_path)
 
     return cools, w1_num, w1_sim, w1_rel_errors, cool_probs_sim, cool_probs_num
-
-
-if __name__ == "__main__":
-
-    # cur file dir
-    cur_dir = os.path.dirname(os.path.abspath(__file__))
-    result_path = os.path.join(cur_dir, 'results/cooling')
-    if not os.path.exists(result_path):
-        os.makedirs(result_path)
-
-    run_wait_time_vs_cool_ave(save_path=result_path)
-    run_wait_time_vs_cool_cv(save_path=result_path)

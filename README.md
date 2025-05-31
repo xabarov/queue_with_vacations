@@ -37,12 +37,15 @@ python run_one_calc_vs_sim.py
 
 #### Waiting Time Analysis
 🚀 Analyze system performance with:
-- `run_wait_time_vs_utilization.py` by utilization factor
-- `run_wait_time_vs_channels.py` by number of channels
-- `run_wait_time_vs_service_cv.py` by service time CV
-- `run_wait_time_vs_warmup_time.py` by warm-up time parameters
-- `run_wait_time_vs_cooling_time.py` by cooling time parameters
-- `run_wait_time_vs_cooling_delay_time.py` by cooling delay parameters
+```bash
+python main.py 
+```
+
+#### Find Best Cooling Delay
+🥇 Optimize cooling delay for a given set of parameters and utilization factor:
+```bash
+python find_best_delay.py 
+```
 
 ## Results
 
