@@ -30,7 +30,7 @@ def calc_no_linear_wait_cost(w1: float, wait_cost: float, alpha=0.7) -> float:
     return (w1 ** alpha)*wait_cost
 
 
-def run(qp, wait_cost=1.0, server_cost=10.0, wait_cost_calc_func=calc_wait_cost):
+def run(qp, wait_cost_calc_func=calc_wait_cost):
     """
     Find best cooling delay for a given set of parameters and utilization factor.
     :param qp: dictionary of parameters
@@ -39,6 +39,10 @@ def run(qp, wait_cost=1.0, server_cost=10.0, wait_cost_calc_func=calc_wait_cost)
     :param wait_cost_calc_func: function to calculate waiting cost
     :return: best cooling delay
     """
+    wait_cost = qp['wait_cost']
+    server_cost = qp['server_cost']
+    idle_bonus = qp['idle_bonus']
+
     rhoes = np.linspace(qp['utilization']['min'], qp['utilization']['max'],
                         qp['utilization']['num_points'])
 
@@ -73,6 +77,8 @@ def run(qp, wait_cost=1.0, server_cost=10.0, wait_cost_calc_func=calc_wait_cost)
                 server_busy_probs = num_results["servers_busy_probs"]
                 cur_servers_cost = np.sum(
                     [i*prob*server_cost for i, prob in enumerate(server_busy_probs)])
+                cur_servers_cost -= server_busy_probs[0] * \
+                    qp['channels']['base']*idle_bonus
 
                 cur_wait_cost = wait_cost_calc_func(
                     w1=num_results["w"][0], wait_cost=wait_cost)
@@ -108,10 +114,10 @@ if __name__ == "__main__":
     # only cooling for simplification
     base_qp['warmup']['mean']['base'] = 0.1
     base_qp['cooling']['mean']['base'] = 5.0
+    base_qp['delay']['mean']['num_points'] = 10
 
     rhos, best_delay, best_cost, best_server, best_wait = run(
-        base_qp, base_qp['wait_cost'], base_qp['server_cost'],
-        wait_cost_calc_func=calc_no_linear_wait_cost)
+        base_qp, wait_cost_calc_func=calc_no_linear_wait_cost)
 
     y_labels = ["Cooling Delay", "Total Cost", "Server Cost", 'Wait Cost']
 

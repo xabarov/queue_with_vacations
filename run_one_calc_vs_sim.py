@@ -40,6 +40,7 @@ def run_calculation(arrival_rate: float, b: list[float],
 
     stat = {}
     stat["w"] = solver.get_w()
+    stat["v"] = solver.get_v()
     stat["process_time"] = time.process_time() - num_start
     stat["p"] = solver.get_p()[:10]
     stat["num_of_iter"] = solver.num_of_iter_
@@ -76,6 +77,7 @@ def run_simulation(arrival_rate: float, b: list[float],
     gamma_params_cold_delay = GammaDistribution.get_params(b_d)
 
     ws = []
+    vs = []
     ps = []
     process_times = []
     warmup_probs = []
@@ -96,6 +98,7 @@ def run_simulation(arrival_rate: float, b: list[float],
         sim.run(num_of_jobs)
 
         ws.append(sim.w)
+        vs.append(sim.v)  
         process_times.append(time.process_time() - im_start)
         cold_probs.append(sim.get_cold_prob())
         cold_delay_probs.append(sim.get_cold_delay_prob())
@@ -107,6 +110,7 @@ def run_simulation(arrival_rate: float, b: list[float],
     stat = {}
 
     stat["w"] = np.mean(ws, axis=0).tolist()
+    stat["v"] = np.mean(vs, axis=0).tolist()
     stat["process_time"] = np.sum(process_times)
     stat["cold_prob"] = np.mean(cold_probs)
     stat["cold_delay_prob"] = np.mean(cold_delay_probs)
