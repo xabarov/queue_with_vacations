@@ -95,6 +95,12 @@ def run(qp, wait_cost=1.0, server_cost=10.0, wait_cost_calc_func=calc_wait_cost)
 
 
 if __name__ == "__main__":
+    
+    import os
+    
+    # if results/best_delay does not exist
+    if not os.path.exists("results/best_delay"):
+        os.makedirs("results/best_delay")
 
     base_qp = read_parameters_from_yaml("base_parameters.yaml")
 
@@ -117,7 +123,7 @@ if __name__ == "__main__":
         ax.set_xlabel(r"$\rho$")
         ax.set_ylabel(y_label)
 
-        plt.savefig(save_path)
+        plt.savefig(os.path.join('results/best_delay', save_path))
         plt.show()
 
         plt.close(_fig)
