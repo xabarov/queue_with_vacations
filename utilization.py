@@ -64,11 +64,11 @@ def run_utilization(qp, save_path: str = None):
     if save_path:
         w1_save_path = os.path.join(save_path, 'w1_vs_utilization.png')
         plot_w1(rhoes, w1_num, w1_sim, save_path=w1_save_path,
-                x_label=r"$\rho$", is_xs_int=False)
+                x_label=r"$\rho$", is_xs_int=False, color=qp['color'])
 
         w1_errors_save_path = os.path.join(
             save_path, 'w1_errors_vs_utilization.png')
         plot_w1_errors(rhoes, w1_rel_errors, save_path=w1_errors_save_path,
-                       x_label=r"$\rho$", is_xs_int=False)
+                       x_label=r"$\rho$", is_xs_int=False, color=qp['color'])
 
     return rhoes, w1_num, w1_sim, w1_rel_errors

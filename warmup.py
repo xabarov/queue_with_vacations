@@ -73,19 +73,19 @@ def run_warmup_ave(qp, save_path: str = None):
             save_path, 'w1_vs_warmup_ave.png')
 
         plot_w1(warmups, w1_num, w1_sim, x_label='Warm-Up Average',
-                save_path=wait_time_save_path)
+                save_path=wait_time_save_path, color=qp['color'])
 
         w1_error_save_path = os.path.join(
             save_path, 'w1_error_vs_warmup_ave.png')
 
         plot_w1_errors(warmups, w1_rel_errors,
-                       x_label='Warm-Up Average', save_path=w1_error_save_path)
+                       x_label='Warm-Up Average', save_path=w1_error_save_path, color=qp['color'])
 
         cool_probs_save_path = os.path.join(
             save_path, 'warmup_probs_vs_warmup_ave.png')
 
         plot_probs(warmups, warmup_probs_num, warmup_probs_sim, x_label='Warm-Up Average',
-                   save_path=cool_probs_save_path)
+                   save_path=cool_probs_save_path, color=qp['color'])
 
     return warmups, w1_num, w1_sim, w1_rel_errors, warmup_probs_num, warmup_probs_sim
 

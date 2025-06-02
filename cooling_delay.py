@@ -77,19 +77,19 @@ def run_cool_delay_average(qp, save_path: str = None):
             save_path, 'w1_vs_cool_delay_ave.png')
 
         plot_w1(cools, w1_num, w1_sim, x_label='Cooling Delay Average',
-                save_path=wait_time_save_path)
+                save_path=wait_time_save_path, color=qp['color'])
 
         w1_error_save_path = os.path.join(
             save_path, 'w1_error_vs_cool_delay_ave.png')
 
         plot_w1_errors(cools, w1_rel_errors,
-                       x_label='Cooling Delay Average', save_path=w1_error_save_path)
+                       x_label='Cooling Delay Average', save_path=w1_error_save_path, color=qp['color'])
 
         cool_probs_save_path = os.path.join(
             save_path, 'cooling_delay_probs_vs_cool_delay_ave.png')
 
         plot_probs(cools, cool_probs_num, cool_probs_sim, x_label='Cooling Delay Average',
-                   save_path=cool_probs_save_path)
+                   save_path=cool_probs_save_path, color=qp['color'])
 
     return cools, w1_num, w1_sim, w1_rel_errors, cool_probs_sim, cool_probs_num
 
@@ -156,18 +156,18 @@ def run_cool_delay_cv(qp, save_path: str = None):
             save_path, 'w1_vs_cool_delay_cv.png')
 
         plot_w1(cool_cvs, w1_num, w1_sim, x_label='Cooling Delay CV',
-                save_path=wait_time_save_path)
+                save_path=wait_time_save_path, color=qp['color'])
 
         w1_error_save_path = os.path.join(
             save_path, 'w1_error_vs_cool_delay_cv.png')
 
         plot_w1_errors(cool_cvs, w1_rel_errors,
-                       x_label='Cooling Delay CV', save_path=w1_error_save_path)
+                       x_label='Cooling Delay CV', save_path=w1_error_save_path, color=qp['color'])
 
         cool_probs_save_path = os.path.join(
             save_path, 'cooling_delay_probs_vs_cool_delay_cv.png')
 
         plot_probs(cool_cvs, cool_probs_num, cool_probs_sim, x_label='Cooling Delay CV',
-                   save_path=cool_probs_save_path)
+                   save_path=cool_probs_save_path, color=qp['color'])
 
     return cool_cvs, w1_num, w1_sim, w1_rel_errors, cool_probs_sim, cool_probs_num

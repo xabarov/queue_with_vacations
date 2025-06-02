@@ -9,6 +9,17 @@ import matplotlib.pyplot as plt
 import numpy as np
 import yaml
 
+SMALL_SIZE = 12
+MEDIUM_SIZE = 14
+BIGGER_SIZE = 16
+
+plt.rc('font', size=SMALL_SIZE)          # controls default text sizes
+plt.rc('axes', titlesize=MEDIUM_SIZE)     # fontsize of the axes title
+plt.rc('axes', labelsize=MEDIUM_SIZE)    # fontsize of the x and y labels
+plt.rc('xtick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
+plt.rc('ytick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
+plt.rc('legend', fontsize=MEDIUM_SIZE)    # legend fontsize
+plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
 
 def calc_rel_error_percent(sim_value: float, calc_value: float) -> float:
     """Calculate the relative error percent between a simulation value and a calculated value."""
@@ -31,7 +42,7 @@ def calc_moments_by_mean_and_coev(mean, coev):
     return b
 
 
-def plot_w1(xs, w1_num, w1_sim, x_label: str, save_path=None, is_xs_int=False):
+def plot_w1(xs, w1_num, w1_sim, x_label: str, save_path=None, is_xs_int=False, color=None):
     """
     Plot the wait time averages for both calculation and simulation.
     :param xs: list of x-axis values.
@@ -43,8 +54,9 @@ def plot_w1(xs, w1_num, w1_sim, x_label: str, save_path=None, is_xs_int=False):
     """
     _fig, ax = plt.subplots()
     # plot first with dash -- line, black, second - with line, black
-    ax.plot(xs, w1_num, label="num", color="black", linestyle="--")
-    ax.plot(xs, w1_sim, label="sim", color="black")
+    
+    ax.plot(xs, w1_num, label="num", color=color, linestyle="--")
+    ax.plot(xs, w1_sim, label="sim", color=color)
     ax.legend()
     ax.set_xlabel(x_label)
     # set xticks to be integers
@@ -60,7 +72,7 @@ def plot_w1(xs, w1_num, w1_sim, x_label: str, save_path=None, is_xs_int=False):
     plt.close(_fig)
 
 
-def plot_w1_errors(xs, w1_rel_errors, x_label, save_path=None, is_xs_int=False):
+def plot_w1_errors(xs, w1_rel_errors, x_label, save_path=None, is_xs_int=False, color = None):
     """
     Plot the wait time relative errors
     :param xs: The x-axis values.
@@ -70,7 +82,8 @@ def plot_w1_errors(xs, w1_rel_errors, x_label, save_path=None, is_xs_int=False):
     :param is_xs_int: Whether the x-axis values are integers.
     """
     _fig, ax = plt.subplots()
-    ax.plot(xs, w1_rel_errors, color="black")
+    
+    ax.plot(xs, w1_rel_errors, color=color)
     ax.set_xlabel(x_label)
     # set xticks to be integers
     if is_xs_int:
@@ -85,7 +98,7 @@ def plot_w1_errors(xs, w1_rel_errors, x_label, save_path=None, is_xs_int=False):
     plt.close(_fig)
 
 
-def plot_probs(xs, probs_num, probs_sim, x_label, save_path=None):
+def plot_probs(xs, probs_num, probs_sim, x_label, save_path=None, color=None):
     """
     Plot the probabilities of different states
     :param xs: The x-axis values.
@@ -95,8 +108,9 @@ def plot_probs(xs, probs_num, probs_sim, x_label, save_path=None):
     :param save_path: The path to save the plot.
     """
     _fig, ax = plt.subplots()
-    ax.plot(xs, probs_num, label="num", color="black", linestyle="--")
-    ax.plot(xs, probs_sim, label="sim", color="black")
+    
+    ax.plot(xs, probs_num, label="num", color=color, linestyle="--")
+    ax.plot(xs, probs_sim, label="sim", color=color)
     ax.legend()
     ax.set_xlabel(x_label)
     ax.set_ylabel("Probability")
