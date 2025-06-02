@@ -7,7 +7,6 @@ from tqdm import tqdm
 
 from run_one_calc_vs_sim import calc_moments_by_mean_and_coev, run_calculation
 from utils import read_parameters_from_yaml
-from most_queue.theory.utils.weibull import Weibull
 
 SMALL_SIZE = 12
 MEDIUM_SIZE = 14

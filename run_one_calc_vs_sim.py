@@ -17,7 +17,7 @@ from utils import calc_moments_by_mean_and_coev
 
 def run_calculation(arrival_rate: float, b: list[float],
                     b_w: list[float], b_c: list[float], b_d: list[float],
-                    num_channels: int):
+                    num_channels: int, p_size: int=10):
     """
     Calculation of an M/H2/n queue with H2-warming, H2-cooling and H2-delay 
     of the start of cooling using Takahasi-Takami method.
@@ -42,7 +42,7 @@ def run_calculation(arrival_rate: float, b: list[float],
     stat["w"] = solver.get_w()
     stat["v"] = solver.get_v()
     stat["process_time"] = time.process_time() - num_start
-    stat["p"] = solver.get_p()[:10]
+    stat["p"] = solver.get_p()[:p_size]
     stat["num_of_iter"] = solver.num_of_iter_
 
     stat["warmup_prob"] = solver.get_warmup_prob()
@@ -55,7 +55,8 @@ def run_calculation(arrival_rate: float, b: list[float],
 
 def run_simulation(arrival_rate: float, b: list[float],
                    b_w: list[float], b_c: list[float], b_d: list[float],
-                   num_channels: int, num_of_jobs: int = 300_000, ave_num: int = 10):
+                   num_channels: int, num_of_jobs: int = 300_000, 
+                   ave_num: int = 10, p_size: int=10):
     """
     Run simulation for an M/H2/n queue with H2-warming, 
     H2-cooling and H2-delay before cooling starts.
@@ -103,7 +104,7 @@ def run_simulation(arrival_rate: float, b: list[float],
         cold_probs.append(sim.get_cold_prob())
         cold_delay_probs.append(sim.get_cold_delay_prob())
         warmup_probs.append(sim.get_warmup_prob())
-        ps.append(sim.get_p()[:10])
+        ps.append(sim.get_p()[:p_size])
 
     # average over all simulations
 
@@ -146,6 +147,9 @@ if __name__ == "__main__":
         b_w=b_warmup, b_c=b_cooling, b_d=b_delay, num_of_jobs=qp['jobs_per_sim'],
         ave_num=qp['sim_to_average']
     )
+    
+    print(f"Sim process time {sim_results['process_time']}")
+    print(f"Calculation process time {num_results['process_time']}")
 
     probs_print(p_sim=sim_results["p"], p_num=num_results["p"], size=10)
     times_print(sim_moments=sim_results["w"], calc_moments=num_results["w"])
